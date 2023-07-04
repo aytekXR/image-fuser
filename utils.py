@@ -35,9 +35,9 @@ class GlobalVariables:
         self.batchSize = 2
         self.epochNum = 20
         self.isRGB = False
-        self.isResume = False
+        self.isResume = True
         self.isDeepSupervision = False
-        self.lr = 1e-4
+        self.lr = 1e-6
         self.save_model_dir_autoencoder = "models/autoencoder"
         self.save_loss_dir = './models/autoencoder_loss'
         self.ssim_weight = [1,10,100,1000,10000] #convert this to a single value
@@ -111,3 +111,32 @@ def get_image(path):
     if GlobalVariables.imgHeight is None:
         GlobalVariables.imgWidth, GlobalVariables.imgHeight = image.size
     return image.resize((GlobalVariables.imgWidth, GlobalVariables.imgHeight))
+
+def save_Timage(img, output_path):
+    img = img.float()
+    img = img.cpu().data[0].numpy()
+    
+    img = (img - np.min(img)) / (np.max(img) - np.min(img) + 1e-5)
+    img = img * 255
+    img = img.transpose(1, 2, 0).astype('uint8')
+    
+    if img.shape[2] == 1:
+        img = img.reshape([img.shape[0], img.shape[1]])
+    img.save(output_path)
+
+# import torch
+# import torchvision.transforms as transforms
+# from PIL import Image
+
+# # Assuming you have a torch tensor named 'tensor_image'
+# # Normalize the tensor values to the range [0, 1]
+# tensor_image_normalized = (tensor_image - tensor_image.min()) / (tensor_image.max() - tensor_image.min())
+
+# # Convert the tensor to a NumPy array
+# numpy_array = tensor_image_normalized.numpy()
+
+# # Convert the NumPy array to a PIL Image
+# pil_image = transforms.ToPILImage()(numpy_array)
+
+# # Save the PIL Image
+# pil_image.save("image.jpg")

@@ -12,16 +12,14 @@ import net
 import utils
 import pytorch_msssim
 
-def setup(args):
-    globVars = utils.GlobalVariables()
+def setup(args, globVars):
     imgList = utils.list_images(args.input_image_dir)
     numofTrainingImages = 8000
     trainImgList = imgList[:numofTrainingImages]
     random.shuffle(trainImgList)
     globVars.set_vars(input_image_dir=args.input_image_dir, output_image_dir=args.output_image_dir, isResume=args.isResume, checkpoint_path=args.checkpoint_path, model_path=args.model_path, trainImgList=trainImgList)
 
-def train():
-    globVars = utils.GlobalVariables()
+def train(globVars):
     ssimWeightIndex = -1
     numofChannel = 3 if utils.GlobalVariables().isRGB else 1
 
@@ -33,7 +31,7 @@ def train():
         nest_model.load_state_dict(torch.load(globVars.checkpoint_path))
     else:
         print('Initializing Weights Randomly')
-    print(nest_model)
+    # print(nest_model)
     optimizer = Adam(nest_model.parameters(), globVars.lr)
     mse_loss = torch.nn.MSELoss()
     ssim_loss = pytorch_msssim.msssim
@@ -127,19 +125,20 @@ def train():
     print("\nDone, trained model saved")
 
 def main():
+    globVars = utils.GlobalVariables()
     parser = argparse.ArgumentParser(description='Inputs for test.py file')
     
     # Add arguments
     parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages/vi/")
-    parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= False)
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="/home/ae/repo/image-fuser/tmp/models")
+    parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= True)
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571.model")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/image-fuser/tmp/images/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
     args = parser.parse_args()
 
-    setup(args)
-    train()
+    setup(args,globVars)
+    train(globVars)
 
 if __name__ == '__main__':
     main() 
