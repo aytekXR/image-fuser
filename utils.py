@@ -32,8 +32,8 @@ class GlobalVariables:
         return cls._instance
 
     def __init__(self):
-        self.batchSize = 4
-        self.epochNum = 2
+        self.batchSize = 2
+        self.epochNum = 20
         self.isRGB = False
         self.isResume = False
         self.isDeepSupervision = False

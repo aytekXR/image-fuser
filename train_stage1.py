@@ -6,6 +6,7 @@ import numpy as np
 import random
 from tqdm import tqdm, trange
 import os
+import time
 
 import net
 import utils
@@ -61,7 +62,7 @@ def train():
             optimizer.zero_grad()
             img = Variable(img, requires_grad=False)
             img = img.cuda()
-            
+
             # encoder
             en = nest_model.encoder(img)
 			# decoder
@@ -90,7 +91,7 @@ def train():
 
             # print logs
             if (batch + 1) % globVars.log_interval == 0:
-                mesg = "{}\t SSIM weight {}\tEpoch {}:\t[{}/{}]\t pixel loss: {:.6f}\t ssim loss: {:.6f}\t total: {:.6f}".format(
+                mesg = "{}\t SSIM weight {}\tEpoch {}:\t[{}/{}]\t pixel loss: {:.6f}\t ssim loss: {:.6f}\t total: {:.4f}\n".format(
                      time.ctime(), globVars.ssim_weight[ssimWeightIndex], tbarStat + 1, count, batches,
                      all_pixel_loss / globVars.log_interval,
                      (globVars.ssim_weight[ssimWeightIndex] * all_ssim_loss) / globVars.log_interval,
@@ -121,7 +122,7 @@ def train():
                 # all loss
                 nest_model.train()
                 nest_model.cuda()
-                tbar.set_description("\nCheckpoint, trained model saved at {}".format(saveDir))
+                tbar.set_description("\nCheckpoint, trained model saved at {}! \n".format(saveDir))
 
     print("\nDone, trained model saved")
 
@@ -129,7 +130,7 @@ def main():
     parser = argparse.ArgumentParser(description='Inputs for test.py file')
     
     # Add arguments
-    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/02paper-repos/mycode/image-fuser/tmp/images/")
+    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages/vi/")
     parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= False)
     parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="/home/ae/repo/image-fuser/tmp/models")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/image-fuser/tmp/images/outputs")
