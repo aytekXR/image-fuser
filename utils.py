@@ -87,7 +87,7 @@ def load_dataset():
         GlobalVariables().trainImgList = GlobalVariables().trainImgList[:-mod]
     return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
 
-def get_train_images_auto(paths):
+def get_images_auto(paths):
     images = []
     for path in paths:
         image = get_image(GlobalVariables().input_image_dir + path)
@@ -112,31 +112,34 @@ def get_image(path):
         GlobalVariables.imgWidth, GlobalVariables.imgHeight = image.size
     return image.resize((GlobalVariables.imgWidth, GlobalVariables.imgHeight))
 
-def save_Timage(img, output_path):
-    img = img.float()
-    img = img.cpu().data[0].numpy()
-    
-    img = (img - np.min(img)) / (np.max(img) - np.min(img) + 1e-5)
-    img = img * 255
-    img = img.transpose(1, 2, 0).astype('uint8')
-    
-    if img.shape[2] == 1:
-        img = img.reshape([img.shape[0], img.shape[1]])
-    img.save(output_path)
+def recons_fusion_images(img_lists, h, w):
+    img_f_list = []
+    h_cen = int(np.floor(h / 2))
+    w_cen = int(np.floor(w / 2))
+    ones_temp = torch.ones(1, 1, h, w).cuda()
+    for i in range(len(img_lists[0])):
+        # img1, img2, img3, img4
+        img1 = img_lists[0][i]
+        img2 = img_lists[1][i]
+        img3 = img_lists[2][i]
+        img4 = img_lists[3][i]
 
-# import torch
-# import torchvision.transforms as transforms
-# from PIL import Image
+        # save_image_test(img1, './outputs/test/block1.png')
+        # save_image_test(img2, './outputs/test/block2.png')
+        # save_image_test(img3, './outputs/test/block3.png')
+        # save_image_test(img4, './outputs/test/block4.png')
 
-# # Assuming you have a torch tensor named 'tensor_image'
-# # Normalize the tensor values to the range [0, 1]
-# tensor_image_normalized = (tensor_image - tensor_image.min()) / (tensor_image.max() - tensor_image.min())
+        img_f = torch.zeros(1, 1, h, w).cuda()
+        count = torch.zeros(1, 1, h, w).cuda()
 
-# # Convert the tensor to a NumPy array
-# numpy_array = tensor_image_normalized.numpy()
-
-# # Convert the NumPy array to a PIL Image
-# pil_image = transforms.ToPILImage()(numpy_array)
-
-# # Save the PIL Image
-# pil_image.save("image.jpg")
+        img_f[:, :, 0:h_cen + 3, 0: w_cen + 3] += img1
+        count[:, :, 0:h_cen + 3, 0: w_cen + 3] += ones_temp[:, :, 0:h_cen + 3, 0: w_cen + 3]
+        img_f[:, :, 0:h_cen + 3, w_cen - 2: w] += img2
+        count[:, :, 0:h_cen + 3, w_cen - 2: w] += ones_temp[:, :, 0:h_cen + 3, w_cen - 2: w]
+        img_f[:, :, h_cen - 2:h, 0: w_cen + 3] += img3
+        count[:, :, h_cen - 2:h, 0: w_cen + 3] += ones_temp[:, :, h_cen - 2:h, 0: w_cen + 3]
+        img_f[:, :, h_cen - 2:h, w_cen - 2: w] += img4
+        count[:, :, h_cen - 2:h, w_cen - 2: w] += ones_temp[:, :, h_cen - 2:h, w_cen - 2: w]
+        img_f = img_f / count
+        img_f_list.append(img_f)
+    return img_f_list

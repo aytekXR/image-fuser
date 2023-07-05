@@ -17,13 +17,18 @@ import torchvision.transforms as transforms
 
 def setup(args, globVars):
     imgList = utils.list_images(args.input_image_dir)
-    globVars.set_vars(input_image_dir=args.input_image_dir, output_image_dir=args.output_image_dir, checkpoint_path=args.checkpoint_path, model_path=args.model_path, testsImgList=imgList)
+    globVars.set_vars(input_image_dir=args.input_image_dir,
+                      output_image_dir=args.output_image_dir,
+                      checkpoint_path=args.checkpoint_path,
+                      model_path=args.model_path,
+                      testsImgList=imgList)
 
 def infer(globVars):
     numofChannel = 3 if utils.GlobalVariables().isRGB else 1
 
     nb_filter = [64, 112, 160, 208, 256]
-    nest_model = net.AutoEncoder(nb_filter, numofChannel, numofChannel, globVars.isDeepSupervision)
+    nest_model = net.AutoEncoder(nb_filter, numofChannel,
+                                 numofChannel, globVars.isDeepSupervision)
     nest_model.load_state_dict(torch.load(globVars.checkpoint_path))
 
     # print(nest_model)
@@ -31,31 +36,36 @@ def infer(globVars):
     nest_model.cuda()
 
     print('Start Infering.....')
-    for img in globVars.testsImgList :
-        img_path = globVars.input_image_dir + img
-        img = utils.get_image(img_path)
-        img = transforms.ToTensor()(img)
-        # img = Variable(img, requires_grad=False)
-        img = img.cuda()
-        
-        # encoder
-        en = nest_model.encoder(img)
-        # decoder
-        output = nest_model.decoder_train(en)
 
-        output_path = globVars.output_image_dir + img
-        utils.save_Timage(output, output_path)
+    if globVars.isRGB :
+        print('RGB image is currently not supported!\n')
+        # TODO will be coded
+    else:
+        images= utils.get_images_auto(globVars.testsImgList)
+        images = Variable(images, requires_grad=False)
+        images = images.cuda()
+        en = nest_model.encoder(images)
+        out = nest_model.decoder_eval(en)
 
+    print("\nDone, Infering. Saving.....")
+    img_fusion_list = utils.recons_fusion_images(out, globVars.imgHeight, globVars.imgWidth)
 
-    print("\nDone, Infering")
+    counter = 0
+    for img_fusion in img_fusion_list:
+        file_name = globVars.testsImgList[counter] +'.png'
+        output_path = globVars.output_image_dir + file_name
+        counter += 1
+		# save images
+        utils.save_image_test(img_fusion, output_path)
+        print(output_path)
 
 def main():
     globVars = utils.GlobalVariables()
     parser = argparse.ArgumentParser(description='Inputs for infer.py file')
     
     # Add arguments
-    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages/vi/")
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571.model")
+    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="./image-fuser/tmp/images/single/")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./image-fuser/premodels/20230703SSIM_10000/Epoch_19_iters2571_1e5.model")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/image-fuser/tmp/images/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments

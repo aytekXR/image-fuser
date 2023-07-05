@@ -17,7 +17,12 @@ def setup(args, globVars):
     numofTrainingImages = 8000
     trainImgList = imgList[:numofTrainingImages]
     random.shuffle(trainImgList)
-    globVars.set_vars(input_image_dir=args.input_image_dir, output_image_dir=args.output_image_dir, isResume=args.isResume, checkpoint_path=args.checkpoint_path, model_path=args.model_path, trainImgList=trainImgList)
+    globVars.set_vars(input_image_dir=args.input_image_dir,
+                      output_image_dir=args.output_image_dir,
+                      isResume=args.isResume,
+                      checkpoint_path=args.checkpoint_path,
+                      model_path=args.model_path,
+                      trainImgList=trainImgList)
 
 def train(globVars):
     ssimWeightIndex = -1
@@ -55,7 +60,7 @@ def train(globVars):
         count = 0
         for batch in range(batches):
             image_paths = globVars.trainImgList[batch * globVars.batchSize:(batch * globVars.batchSize + globVars.batchSize)]
-            img = utils.get_train_images_auto(image_paths)
+            img = utils.get_images_auto(image_paths)
             count += 1
             optimizer.zero_grad()
             img = Variable(img, requires_grad=False)
