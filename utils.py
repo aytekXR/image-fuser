@@ -2,6 +2,7 @@ from os import listdir
 from PIL import Image
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 
 class GlobalVariables:
@@ -124,7 +125,7 @@ def recons_fusion_images(img_lists, h, w):
         img3 = img_lists[2][i]
         img4 = img_lists[3][i]
 
-        # save_image_test(img1, './outputs/test/block1.png')
+        save_image_test(img1, './block1.png')
         # save_image_test(img2, './outputs/test/block2.png')
         # save_image_test(img3, './outputs/test/block3.png')
         # save_image_test(img4, './outputs/test/block4.png')
@@ -143,3 +144,16 @@ def recons_fusion_images(img_lists, h, w):
         img_f = img_f / count
         img_f_list.append(img_f)
     return img_f_list
+
+def save_image_test(img_fusion, output_path):
+    img_fusion = img_fusion.float()
+    img_fusion = img_fusion.cpu().data[0].numpy()
+    
+    img_fusion = (img_fusion - np.min(img_fusion)) / (np.max(img_fusion) - np.min(img_fusion))
+    img_fusion = img_fusion * 255
+    img_fusion = img_fusion.transpose(1, 2, 0).astype('uint8')
+    # cv2.imwrite(output_path, img_fusion)
+    if img_fusion.shape[2] == 1:
+        img_fusion = img_fusion.reshape([img_fusion.shape[0], img_fusion.shape[1]])
+    # 	img_fusion = imresize(img_fusion, [h, w])
+    plt.imsave(output_path, img_fusion)
