@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, path, makedirs
 from PIL import Image
 import numpy as np
 import torch
@@ -55,6 +55,8 @@ class GlobalVariables:
             self.input_image_dir = input_image_dir
         if output_image_dir is not None:
             self.output_image_dir = output_image_dir
+            if not path.exists(output_image_dir):
+                makedirs(output_image_dir)
         if isResume is not None:
             self.isResume = isResume
         if checkpoint_path is not None:
@@ -112,18 +114,6 @@ def get_image(path):
     if GlobalVariables.imgHeight is None:
         GlobalVariables.imgWidth, GlobalVariables.imgHeight = image.size
     return image.resize((GlobalVariables.imgWidth, GlobalVariables.imgHeight))
-
-def recons_fusion_images(img_lists, h, w):
-    img_f_list = []
-    h_cen = int(np.floor(h / 2))
-    w_cen = int(np.floor(w / 2))
-    ones_temp = torch.ones(1, 1, h, w).cuda()
-    for i in range(len(img_lists[0])):
-        # img1, img2, img3, img4
-        img1 = img_lists[0][i]
-        savepath = GlobalVariables.output_image_dir + str(i) + ".png"
-        save_image_test(img1, savepath)
-    return img_f_list
 
 def save_image_test(img_fusion, output_path):
     img_fusion = img_fusion.float()
