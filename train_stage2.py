@@ -151,10 +151,10 @@ def main():
     parser = argparse.ArgumentParser(description='Inputs for test.py file')
     
     # Add arguments
-    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages/vi/")
+    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages")
     parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= True)
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571.model")
-    parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/image-fuser/tmp/images/outputs")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571_1e5.model")
+    parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/03dataset/flir/AnnotatedImages/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
     args = parser.parse_args()
