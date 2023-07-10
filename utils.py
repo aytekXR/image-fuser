@@ -103,10 +103,10 @@ def load_dataset():
         GlobalVariables().trainImgListI = GlobalVariables().trainImgListI[:-mod]
         return int(len(GlobalVariables().trainImgListV) // GlobalVariables().batchSize)
 
-def get_images_auto(paths):
+def get_images_auto(paths, mainfolder = GlobalVariables().input_image_dir):
     images = []
     for path in paths:
-        image = get_image(GlobalVariables().input_image_dir + path)
+        image = get_image(mainfolder + path)
         if GlobalVariables().isRGB is True:
             image = np.transpose(image, (2, 0, 1))
         else:
