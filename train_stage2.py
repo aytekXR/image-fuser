@@ -103,6 +103,12 @@ def train(globVars):
 
             # total loss
             total_loss = pixel_loss_value + globVars.ssim_weight[ssimWeightIndex] * ssim_loss_value
+            del enV
+            del enI
+            del fused
+            del outputs
+            torch.cuda.empty_cache()
+            
             total_loss.backward()
             optimizer.step()
             
