@@ -15,6 +15,8 @@ class GlobalVariables:
     checkpoint_path = None
     model_path = None
     trainImgList = None
+    trainImgListV = None
+    trainImgListI = None
     testsImgList = None
     isRGB = None
     isDeepSupervision = None
@@ -46,7 +48,7 @@ class GlobalVariables:
         self.log_interval = 10  #"number of images after which the training loss is logged, default is 500"
 
 
-    def set_vars(self, batchSize=None, epochNum=None, input_image_dir=None, output_image_dir=None, isResume=None, checkpoint_path=None, model_path=None, trainImgList=None, testsImgList=None, isRGB=None):
+    def set_vars(self, batchSize=None, epochNum=None, input_image_dir=None, output_image_dir=None, isResume=None, checkpoint_path=None, model_path=None, trainImgList=None, testsImgList=None, isRGB=None, trainImgListV=None, trainImgListI=None):
         if batchSize is not None:
             self.batchSize = batchSize
         if epochNum is not None:
@@ -69,6 +71,9 @@ class GlobalVariables:
             self.testsImgList = testsImgList
         if isRGB is not None:
             self.isRGB = isRGB
+        if trainImgListV is not None:
+            self.trainImgListV = trainImgListV
+            self.trainImgListI = trainImgListI
         
 
 def list_images(directory):
@@ -79,7 +84,11 @@ def list_images(directory):
     return images
 
 def load_dataset():
-    num_images = len(GlobalVariables().trainImgList)
+    if GlobalVariables().trainImgList is not None:
+        num_images = len(GlobalVariables().trainImgList)
+    else:
+        num_images = len(GlobalVariables().trainImgListV)
+
     mod = num_images % GlobalVariables().batchSize
     print('BATCH SIZE: {}'.format(GlobalVariables().batchSize))
     print('Train images number: {}'.format(num_images))
@@ -87,8 +96,13 @@ def load_dataset():
 
     if mod > 0:
         print('Train set has been trimmed %d samples...\n' % mod)
-        GlobalVariables().trainImgList = GlobalVariables().trainImgList[:-mod]
-    return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
+        if GlobalVariables().trainImgList is not None:
+            GlobalVariables().trainImgList = GlobalVariables().trainImgList[:-mod]
+            return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
+        else:
+            GlobalVariables().trainImgListV = GlobalVariables().trainImgListV[:-mod]
+            GlobalVariables().trainImgListI = GlobalVariables().trainImgListI[:-mod]
+            return int(len(GlobalVariables().trainImgListV) // GlobalVariables().batchSize)
 
 def get_images_auto(paths):
     images = []

@@ -90,6 +90,3 @@ def nuclear_pooling(tensor, kernel_size=None):
         s_sum = torch.sum(s)
         vectors[0, i, 0, 0] = s_sum
     return vectors
-
-
-
