@@ -82,7 +82,8 @@ def train(globVars):
 			
             
             # fuser
-            fused = fuser(enV, enI)
+            # TODO will be coded
+            fused = nest_model.fusion(enV, enI);
             
             # decoder
             outputs = nest_model.decoder_train(fused)

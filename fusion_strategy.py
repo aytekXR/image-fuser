@@ -8,7 +8,7 @@ EPSILON = 1e-5
 
 
 # attention fusion strategy, average based on weight maps
-def attention_fusion_weight(tensor1, tensor2, p_type):
+def attention_fusion_weight(tensor1, tensor2, p_type='avg'):
     # avg, max, nuclear
     f_channel = channel_fusion(tensor1, tensor2,  p_type)
     f_spatial = spatial_fusion(tensor1, tensor2)
