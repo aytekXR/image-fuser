@@ -126,7 +126,7 @@ class AutoEncoder(nn.Module):
         # x5_0 = self.DB5_0(self.pool(x4_0))
         return [x1_0, x2_0, x3_0, x4_0]
 
-    def fusion(self, en1, en2, p_type):
+    def fusion(self, en1, en2, p_type='avg'):
         # attention weight
         fusion_function = fusion_strategy.attention_fusion_weight
 

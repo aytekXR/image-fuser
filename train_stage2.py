@@ -65,8 +65,8 @@ def train(globVars):
         for batch in range(batches):
             image_pathsV = globVars.trainImgListV[batch * globVars.batchSize:(batch * globVars.batchSize + globVars.batchSize)]
             image_pathsI = globVars.trainImgListI[batch * globVars.batchSize:(batch * globVars.batchSize + globVars.batchSize)]
-            imgV = utils.get_images_auto(image_pathsV, globVars.trainImgListV)
-            imgI = utils.get_images_auto(image_pathsI, globVars.trainImgListI)
+            imgV = utils.get_images_auto(image_pathsV, mainfolder=globVars.input_image_dir + "/vis/")
+            imgI = utils.get_images_auto(image_pathsI, mainfolder=globVars.input_image_dir + "/ir/")
             
             count += 1
             optimizer.zero_grad()

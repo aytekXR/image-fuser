@@ -94,16 +94,23 @@ def load_dataset():
     print('Train images number: {}'.format(num_images))
     print('Train images samples: {}'.format(num_images / GlobalVariables().batchSize))
 
-    print('Train set has been trimmed %d samples...\n' % mod)
-    if GlobalVariables().trainImgList is not None:
-        GlobalVariables().trainImgList = GlobalVariables().trainImgList[:-mod]
-        return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
+    if mod >0:
+        print('Train set has been trimmed %d samples...\n' % mod)
+        if GlobalVariables().trainImgList is not None:
+            GlobalVariables().trainImgList = GlobalVariables().trainImgList[:-mod]
+            return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
+        else:
+            GlobalVariables().trainImgListV = GlobalVariables().trainImgListV[:-mod]
+            GlobalVariables().trainImgListI = GlobalVariables().trainImgListI[:-mod]
+            return int(len(GlobalVariables().trainImgListV) // GlobalVariables().batchSize)
     else:
-        GlobalVariables().trainImgListV = GlobalVariables().trainImgListV[:-mod]
-        GlobalVariables().trainImgListI = GlobalVariables().trainImgListI[:-mod]
-        return int(len(GlobalVariables().trainImgListV) // GlobalVariables().batchSize)
+        if GlobalVariables().trainImgList is not None:
+            return int(len(GlobalVariables().trainImgList) // GlobalVariables().batchSize)
+        else:
+            return int(len(GlobalVariables().trainImgListV) // GlobalVariables().batchSize)
 
-def get_images_auto(paths, mainfolder = GlobalVariables().input_image_dir):
+
+def get_images_auto(paths, mainfolder=GlobalVariables().input_image_dir):
     images = []
     for path in paths:
         image = get_image(mainfolder + path)
