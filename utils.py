@@ -18,6 +18,8 @@ class GlobalVariables:
     trainImgListV = None
     trainImgListI = None
     testsImgList = None
+    testsImgListV = None
+    testsImgListI = None
     isRGB = None
     isDeepSupervision = None
     lr = None
@@ -35,8 +37,8 @@ class GlobalVariables:
         return cls._instance
 
     def __init__(self):
-        self.batchSize = 2
-        self.epochNum = 20
+        self.batchSize = 1
+        self.epochNum = 100
         self.isRGB = False
         self.isResume = True
         self.isDeepSupervision = False
@@ -48,7 +50,7 @@ class GlobalVariables:
         self.log_interval = 10  #"number of images after which the training loss is logged, default is 500"
 
 
-    def set_vars(self, batchSize=None, epochNum=None, input_image_dir=None, output_image_dir=None, isResume=None, checkpoint_path=None, model_path=None, trainImgList=None, testsImgList=None, isRGB=None, trainImgListV=None, trainImgListI=None):
+    def set_vars(self, batchSize=None, epochNum=None, input_image_dir=None, output_image_dir=None, isResume=None, checkpoint_path=None, model_path=None, trainImgList=None, testsImgList=None, isRGB=None, trainImgListV=None, trainImgListI=None, testsImgListV=None, testsImgListI=None):
         if batchSize is not None:
             self.batchSize = batchSize
         if epochNum is not None:
@@ -74,6 +76,9 @@ class GlobalVariables:
         if trainImgListV is not None:
             self.trainImgListV = trainImgListV
             self.trainImgListI = trainImgListI
+        if testsImgListV is not None:
+            self.testsImgListV = testsImgListV
+            self.testsImgListI = testsImgListI
         
 
 def list_images(directory):
