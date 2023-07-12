@@ -131,17 +131,6 @@ def train(globVars):
                 all_ssim_loss = 0.
                 all_pixel_loss = 0.
 
-            # show images
-            if (batch + 1) % globVars.log_interval == 0:
-                tmpImg = outputs[0][0].float()
-                tmpImg = tmpImg.cpu().data[0].numpy()
-                tmpImg = (tmpImg - np.min(tmpImg)) / (np.max(tmpImg) - np.min(tmpImg))
-                tmpImg = tmpImg * 255
-                plt.imshow(tmpImg)
-
-
-
-
             # Routine Saves
             if((batch+1) % (200*globVars.log_interval)) == 0 or (batches - batch == 1) :
                 # Save model
