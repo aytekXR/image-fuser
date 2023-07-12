@@ -42,7 +42,7 @@ def infer(globVars):
         # TODO will be coded
     
     for item in globVars.testsImgList:
-        images= utils.get_images_auto([item], globVars.testsImgList)
+        images= utils.get_images_auto([item], globVars.input_image_dir)
         # images = images[0]
         images = Variable(images, requires_grad=False)
         images = images.cuda()

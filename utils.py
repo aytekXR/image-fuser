@@ -38,7 +38,7 @@ class GlobalVariables:
 
     def __init__(self):
         self.batchSize = 1
-        self.epochNum = 100
+        self.epochNum = 1000
         self.isRGB = False
         self.isResume = True
         self.isDeepSupervision = False
