@@ -11,6 +11,7 @@ import time
 import net
 import utils
 import pytorch_msssim
+import matplotlib.pyplot as plt
 
 def setup(args, globVars):
     imgListV = utils.list_images(args.input_image_dir+"/vis/")
@@ -129,6 +130,17 @@ def train(globVars):
                 count_loss += 1
                 all_ssim_loss = 0.
                 all_pixel_loss = 0.
+
+            # show images
+            if (batch + 1) % globVars.log_interval == 0:
+                tmpImg = outputs[0][0].float()
+                tmpImg = tmpImg.cpu().data[0].numpy()
+                tmpImg = (tmpImg - np.min(tmpImg)) / (np.max(tmpImg) - np.min(tmpImg))
+                tmpImg = tmpImg * 255
+                plt.imshow(tmpImg)
+
+
+
 
             # Routine Saves
             if((batch+1) % (200*globVars.log_interval)) == 0 or (batches - batch == 1) :
