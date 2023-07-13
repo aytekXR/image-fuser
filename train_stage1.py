@@ -100,6 +100,8 @@ def train(globVars):
                      (globVars.ssim_weight[ssimWeightIndex] * all_ssim_loss) / globVars.log_interval,
                      (globVars.ssim_weight[ssimWeightIndex] * all_ssim_loss + all_pixel_loss) / globVars.log_interval)
                 tbar.set_description(mesg)
+                ofile =globVars.save_model_Dir + "/SSIM_{}".format(globVars.ssim_weight[ssimWeightIndex]) + "logfile.txt"
+                utils.savelog(ofile, mesg)
                 Loss_pixel.append(all_pixel_loss / globVars.log_interval)
                 Loss_ssim.append(all_ssim_loss / globVars.log_interval)
                 Loss_all.append((globVars.ssim_weight[ssimWeightIndex] * all_ssim_loss + all_pixel_loss) / globVars.log_interval)
@@ -112,7 +114,7 @@ def train(globVars):
                 # Save model
                 nest_model.eval()
                 nest_model.cpu()
-                saveDir = globVars.save_model_dir_autoencoder + "/SSIM_{}".format(globVars.ssim_weight[ssimWeightIndex])
+                saveDir = globVars.save_model_Dir + "/SSIM_{}".format(globVars.ssim_weight[ssimWeightIndex])
                 if not os.path.exists(saveDir):
                     # Create the directory
                     os.makedirs(saveDir)
@@ -124,10 +126,13 @@ def train(globVars):
                 # SSIM loss
                 # all loss
                 nest_model.train()
-                nest_model.cuda()
-                tbar.set_description("\nCheckpoint, trained model saved at {}! \n".format(saveDir))
-
+                mesg = "\nCheckpoint, trained model saved at {}! \n".format(saveDir)
+                tbar.set_description(mesg)
+                ofile =globVars.save_model_Dir + "/SSIM_{}".format(globVars.ssim_weight[ssimWeightIndex]) + "logfile.txt"
+                utils.savelog(ofile, mesg)                
     print("\nDone, trained model saved")
+    ofile =globVars.save_model_Dir + "/SSIM_{}".format(globVars.ssim_weight[ssimWeightIndex]) + "logfile.txt"
+    utils.savelog(ofile, "\nDone, trained model saved\n\n\n\n\n\n\n")
 
 def main():
     globVars = utils.GlobalVariables()

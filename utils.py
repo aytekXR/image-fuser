@@ -23,7 +23,7 @@ class GlobalVariables:
     isRGB = None
     isDeepSupervision = None
     lr = None
-    save_model_dir_autoencoder = None
+    save_model_Dir = None
     save_loss_dir = None
     ssim_weight = None
     ssim_path = None
@@ -43,7 +43,7 @@ class GlobalVariables:
         self.isResume = True
         self.isDeepSupervision = False
         self.lr = 1e-6
-        self.save_model_dir_autoencoder = "models/autoencoder"
+        self.save_model_Dir = "models/autoencoder"
         self.save_loss_dir = './models/autoencoder_loss'
         self.ssim_weight = [1,10,100,1000,10000] #convert this to a single value
         self.ssim_path = ['1e0', '1e1', '1e2', '1e3', '1e4']
