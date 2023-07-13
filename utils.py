@@ -147,3 +147,8 @@ def save_image_test(img_fusion, output_path):
     img_fusion = (img_fusion - np.min(img_fusion)) / (np.max(img_fusion) - np.min(img_fusion))
     img_fusion = img_fusion * 255
     plt.imsave(output_path, img_fusion, cmap='gray')
+
+def savelog(ofile,msg):
+    # Appending to a file
+    with open(ofile, 'a') as file:
+        file.write(msg)
