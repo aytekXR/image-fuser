@@ -38,11 +38,11 @@ class GlobalVariables:
 
     def __init__(self):
         self.batchSize = 1
-        self.epochNum = 1000
+        self.epochNum = 30
         self.isRGB = False
         self.isResume = True
         self.isDeepSupervision = False
-        self.lr = 1e-6
+        self.lr = 1e-4
         self.save_model_Dir = "models/autoencoder"
         self.save_loss_dir = './models/autoencoder_loss'
         self.ssim_weight = [1,10,100,1000,10000] #convert this to a single value
