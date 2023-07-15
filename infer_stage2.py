@@ -44,9 +44,9 @@ def infer(globVars):
         print('RGB image is currently not supported!\n')
         # TODO will be coded
     
-    for item in globVars.testsImgList:
-        imagesV= utils.get_images_auto([item], globVars.testsImgListV)
-        imagesI= utils.get_images_auto([item], globVars.testsImgListI)
+    for item1, item2 in zip(globVars.testsImgListV, globVars.testsImgListI):
+        imagesV= utils.get_images_auto([item1], globVars.input_image_dir +'/vis/')
+        imagesI= utils.get_images_auto([item2], globVars.input_image_dir +'/ir/')
         # images = images[0]
         imagesV = Variable(imagesV, requires_grad=False)
         imagesI = Variable(imagesI, requires_grad=False)
@@ -61,7 +61,7 @@ def infer(globVars):
         # decoder
         out = nest_model.decoder_eval(fused)
         
-        savepath = globVars.output_image_dir + "/o" + item
+        savepath = globVars.output_image_dir + "/o" + item1
         savepath.replace(".jpg", ".png")
         utils.save_image_test(out[0][0],savepath)
 
@@ -72,9 +72,9 @@ def main():
     parser = argparse.ArgumentParser(description='Inputs for infer.py file')
     
     # Add arguments
-    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages")
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571_1e5.model")
-    parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/03dataset/flir/AnnotatedImages/outputs")
+    parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="tmp/single")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="models/autoencoder/SSIM_10000/Epoch_3_iters5142.model")
+    parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="tmp/single/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
     args = parser.parse_args()
