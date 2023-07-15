@@ -73,9 +73,9 @@ def main():
     
     # Add arguments
     parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="tmp/single")
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="models/autoencoder/SSIM_10000/Epoch_3_iters5142.model")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="/home/ae/repo/image-fuser/premodels/fuser/Epoch_3_iters5142.model")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="tmp/single/outputs")
-    parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
+    parser.add_argument('-m', '--model-path',       help='Directory to save the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
     args = parser.parse_args()
 

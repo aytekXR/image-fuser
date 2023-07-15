@@ -42,12 +42,12 @@ class GlobalVariables:
         self.isRGB = False
         self.isResume = True
         self.isDeepSupervision = False
-        self.lr = 1e-4
+        self.lr = 1e-5
         self.save_model_Dir = "models/autoencoder"
         self.save_loss_dir = './models/autoencoder_loss'
         self.ssim_weight = [1,10,100,1000,10000] #convert this to a single value
         self.ssim_path = ['1e0', '1e1', '1e2', '1e3', '1e4']
-        self.log_interval = 10  #"number of images after which the training loss is logged, default is 500"
+        self.log_interval = 20  #"number of images after which the training loss is logged, default is 500"
 
 
     def set_vars(self, batchSize=None, epochNum=None, input_image_dir=None, output_image_dir=None, isResume=None, checkpoint_path=None, model_path=None, trainImgList=None, testsImgList=None, isRGB=None, trainImgListV=None, trainImgListI=None, testsImgListV=None, testsImgListI=None):

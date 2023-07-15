@@ -84,7 +84,7 @@ def train(globVars):
             
             # fuser
             # TODO will be coded
-            fused = nest_model.fusion(enV, enI);
+            fused = nest_model.fusion(enI, enV);
             
             # decoder
             outputs = nest_model.decoder_train(fused)
@@ -134,7 +134,7 @@ def train(globVars):
                 all_pixel_loss = 0.
 
             # Routine Saves
-            if((batch+1) % (200*globVars.log_interval)) == 0 or (batches - batch == 1) :
+            if((batch+1) % (50*globVars.log_interval)) == 0 or (batches - batch == 1) :
                 # Save model
                 nest_model.eval()
                 nest_model.cpu()
@@ -142,7 +142,7 @@ def train(globVars):
                 if not os.path.exists(saveDir):
                     # Create the directory
                     os.makedirs(saveDir)
-                saveDir += "/Epoch_{}_iters{}.model".format(tbarStat, count)
+                saveDir += "/E{}_i{}.model".format(tbarStat, count)
                 torch.save(nest_model.state_dict(), saveDir)
 
                 # TODO: Save loss data 
@@ -167,7 +167,7 @@ def main():
     # Add arguments
     parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages")
     parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= True)
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="./premodels/20230703SSIM_10000/Epoch_19_iters2571_1e5.model")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="premodels/fuser/Epoch_3_iters5142.model")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/03dataset/flir/AnnotatedImages/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
