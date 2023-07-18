@@ -167,7 +167,7 @@ def main():
     # Add arguments
     parser.add_argument('-i', '--input-image-dir' , help='Input Image Directory containing /ir/ and /vis/ folders', default="/home/ae/repo/03dataset/flir/AnnotatedImages")
     parser.add_argument('-r', '--isResume' , help='set whether contunie training', default= True)
-    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="premodels/fuser/Epoch_3_iters5142.model")
+    parser.add_argument('-c', '--checkpoint-path' , help='Load Model Checkpoints Path', default="premodels/fuser/20230716.model")
     parser.add_argument('-o', '--output-image-dir', help='Output Image Directory. Unless given, input dir will be used.', default="/home/ae/repo/03dataset/flir/AnnotatedImages/outputs")
     parser.add_argument('-m', '--model-path',       help='Directory containing the models', default="/home/ae/repo/image-fuser/tmp/models")
     # Parse the arguments
